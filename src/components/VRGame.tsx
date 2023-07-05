@@ -1,13 +1,14 @@
 import { XR, Controllers } from "@react-three/xr";
 import { Sky } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import Floor from "./Floor";
+import Floor from "../models/Floor";
 import VRNavigation from "./VRNavigation";
+import Gun from "./Gun";
 
 const VRGame = () => {
   return (
     <XR>
-      <Controllers />
+      <Gun />
       <Sky />
       <Floor />
       <ambientLight />
