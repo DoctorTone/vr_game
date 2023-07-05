@@ -5,10 +5,6 @@ import Floor from "./Floor";
 import VRNavigation from "./VRNavigation";
 
 const VRGame = () => {
-  const updatePos = (x: number, y: number) => {
-    // console.log("Pos = ", x, y);
-  };
-
   return (
     <XR>
       <Controllers />
@@ -20,7 +16,7 @@ const VRGame = () => {
         <boxGeometry />
         <meshBasicMaterial color="blue" />
       </mesh>
-      <VRNavigation updatePos={updatePos} />
+      <VRNavigation />
     </XR>
   );
 };
