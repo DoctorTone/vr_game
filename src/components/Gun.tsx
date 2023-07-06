@@ -1,5 +1,10 @@
-import React, { useRef, useEffect } from "react";
-import { useController, useXR } from "@react-three/xr";
+import React, { useRef, useState, useEffect } from "react";
+import {
+  XRControllerEvent,
+  useController,
+  useXR,
+  useXREvent,
+} from "@react-three/xr";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
@@ -8,6 +13,13 @@ const Gun = () => {
   const rightController = useController("right");
   const blasterRef = useRef<THREE.Group>(null!);
   const player = useXR((state) => state.player);
+  const [fireSound] = useState(() => new Audio("./sounds/blaster.ogg"));
+
+  const onFire = () => {
+    fireSound.play();
+  };
+
+  useXREvent("selectstart", onFire);
 
   type GLTFResult = GLTF & {
     nodes: {
