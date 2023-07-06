@@ -39,10 +39,7 @@ const Gun = () => {
   });
   return (
     <group ref={blasterRef} dispose={null}>
-      <group
-        position={[0.311, 1.207, -0.106]}
-        rotation={[0, Math.PI / 2, 0]}
-        scale={3.057}>
+      <group scale={0.5} rotation={[-Math.PI / 3, 0, 0]}>
         <mesh
           geometry={nodes.Mesh_blasterA.geometry}
           material={materials.metal}
