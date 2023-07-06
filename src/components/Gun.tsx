@@ -1,11 +1,16 @@
-import React, { useRef } from "react";
-import { useController } from "@react-three/xr";
+import React, { useRef, useEffect } from "react";
+import { useController, useXR } from "@react-three/xr";
 import { useFrame } from "@react-three/fiber";
 import Box from "@react-three/drei";
 
 const Gun = () => {
   const rightController = useController("right");
   const controllerPosRef = useRef<THREE.Mesh>(null!);
+  const player = useXR((state) => state.player);
+
+  useEffect(() => {
+    player.add(controllerPosRef.current);
+  }, []);
 
   useFrame(() => {
     if (!rightController) return;
