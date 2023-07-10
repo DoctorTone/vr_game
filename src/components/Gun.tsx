@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
+import * as THREE from "three";
 import {
   XRControllerEvent,
   useController,
@@ -76,10 +77,15 @@ const Gun = () => {
             material={materials.purple}
           />
         </group>
-        {/* <mesh visible={blasting} position={[-0.07, -0.3, -0.225]}>
-          <sphereGeometry args={[0.05, 16, 16]} />
+        <mesh
+          visible={blasting}
+          position={[-0.07, -0.2, -0.19]}
+          rotation-x={2}
+          scale={0.75}
+        >
+          <torusGeometry args={[0.075, 0.01]} />
           <meshLambertMaterial emissive="white" />
-        </mesh> */}
+        </mesh>
         <pointLight visible={blasting} position={[-0.07, -0.3, -0.225]} />
       </group>
     </>
