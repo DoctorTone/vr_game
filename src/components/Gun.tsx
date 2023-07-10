@@ -8,6 +8,7 @@ import {
 } from "@react-three/xr";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
+import { SCENE } from "../state/Config.js";
 import { GLTF } from "three-stdlib";
 
 const Gun = () => {
@@ -17,10 +18,13 @@ const Gun = () => {
   const [fireSound] = useState(() => new Audio("./sounds/blaster.ogg"));
   const [blastIntensity, setIntensity] = useState(0);
   const [blasting, setBlasting] = useState(false);
+  const bulletRef = useRef<THREE.Mesh>(null!);
+  const firedRef = useRef(false);
 
   const onFire = () => {
     fireSound.play();
     setBlasting(true);
+    firedRef.current = true;
     setTimeout(() => {
       setBlasting(false);
     }, 200);
@@ -55,6 +59,12 @@ const Gun = () => {
 
     blasterRef.current.position.copy(controller.position);
     blasterRef.current.rotation.copy(controller.rotation);
+
+    // Bullets
+    if (firedRef.current) {
+      bulletRef.current.visible = true;
+      bulletRef.current.position.set(0, 1, -3);
+    }
   });
   return (
     <>
@@ -88,6 +98,12 @@ const Gun = () => {
         </mesh>
         <pointLight visible={blasting} position={[-0.07, -0.3, -0.225]} />
       </group>
+      <mesh ref={bulletRef}>
+        <boxGeometry
+          args={[SCENE.BULLET_SIZE, SCENE.BULLET_SIZE, SCENE.BULLET_SIZE]}
+        />
+        <meshLambertMaterial emissive="white" />
+      </mesh>
     </>
   );
 };
