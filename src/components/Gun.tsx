@@ -16,10 +16,10 @@ const Gun = () => {
   const blasterRef = useRef<THREE.Group>(null!);
   const player = useXR((state) => state.player);
   const [fireSound] = useState(() => new Audio("./sounds/blaster.ogg"));
-  const [blastIntensity, setIntensity] = useState(0);
   const [blasting, setBlasting] = useState(false);
   const bulletRef = useRef<THREE.Mesh>(null!);
   const firedRef = useRef(false);
+  const firingRef = useRef(false);
 
   const onFire = () => {
     fireSound.play();
@@ -52,7 +52,7 @@ const Gun = () => {
     player.add(blasterRef.current);
   }, []);
 
-  useFrame(() => {
+  useFrame((state, delta) => {
     if (!rightController) return;
 
     const { grip: controller } = rightController;
@@ -61,9 +61,15 @@ const Gun = () => {
     blasterRef.current.rotation.copy(controller.rotation);
 
     // Bullets
+    if (firingRef.current) {
+      bulletRef.current.position.z -= delta;
+    }
+
     if (firedRef.current) {
       bulletRef.current.visible = true;
-      bulletRef.current.position.set(0, 1, -3);
+      bulletRef.current.position.copy(controller.position);
+      firedRef.current = false;
+      firingRef.current = true;
     }
   });
   return (
