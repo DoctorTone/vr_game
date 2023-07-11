@@ -15,11 +15,13 @@ const Gun = () => {
   const rightController = useController("right");
   const blasterRef = useRef<THREE.Group>(null!);
   const player = useXR((state) => state.player);
-  const [fireSound] = useState(() => new Audio("./sounds/blaster.ogg"));
+  const [fireSound] = useState(() => new Audio("./sounds/blasterShort.ogg"));
   const [blasting, setBlasting] = useState(false);
   const bulletRef = useRef<THREE.Mesh>(null!);
   const firedRef = useRef(false);
   const firingRef = useRef(false);
+  const dummyMatrix = useRef<THREE.Matrix4>(new THREE.Matrix4());
+  const bulletDir = useRef(new THREE.Vector3());
 
   const onFire = () => {
     fireSound.play();
@@ -62,12 +64,14 @@ const Gun = () => {
 
     // Bullets
     if (firingRef.current) {
-      bulletRef.current.position.z -= delta;
+      bulletRef.current.position.add(bulletDir.current);
     }
 
     if (firedRef.current) {
       bulletRef.current.visible = true;
       bulletRef.current.position.copy(controller.position);
+      dummyMatrix.current.identity().extractRotation(controller.matrixWorld);
+      bulletDir.current.set(0, 0, -0.1).applyMatrix4(dummyMatrix.current);
       firedRef.current = false;
       firingRef.current = true;
     }
@@ -93,7 +97,7 @@ const Gun = () => {
             material={materials.purple}
           />
         </group>
-        <mesh
+        {/* <mesh
           visible={blasting}
           position={[-0.07, -0.2, -0.19]}
           rotation-x={2}
@@ -101,7 +105,7 @@ const Gun = () => {
         >
           <torusGeometry args={[0.075, 0.01]} />
           <meshLambertMaterial emissive="white" />
-        </mesh>
+        </mesh> */}
         <pointLight visible={blasting} position={[-0.07, -0.3, -0.225]} />
       </group>
       <mesh ref={bulletRef}>
