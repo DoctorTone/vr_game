@@ -89,7 +89,7 @@ const Gun = ({ getEnemies }: GunProps) => {
 
     if (firedRef.current) {
       bulletRef.current.visible = true;
-      bulletRef.current.position.copy(controller.position);
+      bulletRef.current.position.copy(controller.position.add(player.position));
       dummyMatrix.current.identity().extractRotation(controller.matrixWorld);
       bulletDir.current.set(0, -0.1, -0.065).applyMatrix4(dummyMatrix.current);
       firedRef.current = false;
