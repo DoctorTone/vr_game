@@ -11,7 +11,14 @@ import { useGLTF } from "@react-three/drei";
 import { SCENE } from "../state/Config.js";
 import { GLTF } from "three-stdlib";
 
-const Gun = () => {
+interface GunProps {
+  bounds: THREE.Box3[];
+}
+
+const Gun = ({ bounds }: GunProps) => {
+  // DEBUG
+  console.log("Box = ", bounds);
+
   const rightController = useController("right");
   const blasterRef = useRef<THREE.Group>(null!);
   const player = useXR((state) => state.player);
@@ -65,13 +72,16 @@ const Gun = () => {
     // Bullets
     if (firingRef.current) {
       bulletRef.current.position.add(bulletDir.current);
+      // if (bounds[0].containsPoint(bulletRef.current.position)) {
+      //   console.log("Hit it");
+      // }
     }
 
     if (firedRef.current) {
       bulletRef.current.visible = true;
       bulletRef.current.position.copy(controller.position);
       dummyMatrix.current.identity().extractRotation(controller.matrixWorld);
-      bulletDir.current.set(0, 0, -0.1).applyMatrix4(dummyMatrix.current);
+      bulletDir.current.set(0, -0.1, -0.065).applyMatrix4(dummyMatrix.current);
       firedRef.current = false;
       firingRef.current = true;
     }
