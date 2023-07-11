@@ -12,13 +12,10 @@ import { SCENE } from "../state/Config.js";
 import { GLTF } from "three-stdlib";
 
 interface GunProps {
-  bounds: THREE.Box3[];
+  getEnemies: () => THREE.Mesh[];
 }
 
-const Gun = ({ bounds }: GunProps) => {
-  // DEBUG
-  console.log("Box = ", bounds);
-
+const Gun = ({ getEnemies }: GunProps) => {
   const rightController = useController("right");
   const blasterRef = useRef<THREE.Group>(null!);
   const player = useXR((state) => state.player);
@@ -29,6 +26,7 @@ const Gun = ({ bounds }: GunProps) => {
   const firingRef = useRef(false);
   const dummyMatrix = useRef<THREE.Matrix4>(new THREE.Matrix4());
   const bulletDir = useRef(new THREE.Vector3());
+  const enemiesRef = useRef<THREE.Mesh[]>([]);
 
   const onFire = () => {
     fireSound.play();
@@ -72,9 +70,18 @@ const Gun = ({ bounds }: GunProps) => {
     // Bullets
     if (firingRef.current) {
       bulletRef.current.position.add(bulletDir.current);
-      // if (bounds[0].containsPoint(bulletRef.current.position)) {
-      //   console.log("Hit it");
-      // }
+      enemiesRef.current = getEnemies();
+      // DEBUG
+      // console.log(boundsRef.current);
+      if (
+        enemiesRef.current[0].geometry.boundingBox!.containsPoint(
+          bulletRef.current.position
+        )
+      ) {
+        console.log("Hit it");
+        enemiesRef.current[0].visible = false;
+        firingRef.current = false;
+      }
     }
 
     if (firedRef.current) {

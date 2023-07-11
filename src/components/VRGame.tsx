@@ -9,11 +9,13 @@ import Gun from "./Gun";
 import GameWorld from "./GameWorld";
 
 const VRGame = () => {
-  const bounding = useRef<THREE.Box3[]>([]);
+  const enemiesRef = useRef<THREE.Mesh[]>([]);
 
-  const worldUpdate = (boxes: THREE.Box3[]) => {
-    bounding.current = [...boxes];
+  const worldUpdate = (enemies: THREE.Mesh[]) => {
+    enemiesRef.current = [...enemies];
   };
+
+  const getCurrentEnemies = () => enemiesRef.current;
 
   return (
     <XR>
@@ -22,7 +24,7 @@ const VRGame = () => {
       <ambientLight />
       <pointLight position={[10, 10, 10]} />
       <GameWorld updateWorld={worldUpdate} />
-      <Gun bounds={bounding.current} />
+      <Gun getEnemies={getCurrentEnemies} />
       <VRNavigation />
     </XR>
   );

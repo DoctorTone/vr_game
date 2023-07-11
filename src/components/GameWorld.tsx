@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 
 interface GameProps {
-  updateWorld: (bounds: THREE.Box3[]) => void;
+  updateWorld: (enemies: THREE.Mesh[]) => void;
 }
 
 const GameWorld = ({ updateWorld }: GameProps) => {
@@ -14,9 +14,10 @@ const GameWorld = ({ updateWorld }: GameProps) => {
 
     if (!box.current.geometry.boundingBox) {
       box.current.geometry.computeBoundingBox();
+      box.current.geometry.boundingBox!.translate(new THREE.Vector3(0, 2, -3));
     }
 
-    updateWorld([box.current.geometry.boundingBox!]);
+    updateWorld([box.current]);
   });
 
   return (
