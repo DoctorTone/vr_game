@@ -78,7 +78,10 @@ const Gun = ({ getEnemies }: GunProps) => {
           bulletRef.current.position
         )
       ) {
-        console.log("Hit it");
+        bulletRef.current.position.y = -1000;
+        enemiesRef.current[0].geometry.boundingBox!.translate(
+          new THREE.Vector3(0, -1000, 0)
+        );
         enemiesRef.current[0].visible = false;
         firingRef.current = false;
       }
